@@ -12,6 +12,7 @@ void write_file(const char *path, const char *content);
 
 // Function to create a .clang-format file
 void create_clang_format(const char *root_dir);
+void create_clang_tidy(const char *root_dir);
 
 // Function to create all the necessary md files
 void create_markdown(const char *root_dir);
@@ -389,7 +390,7 @@ void create_project_structure(const char *root_dir, const char *app_dir, const c
              "}\n",
              lib_dir);
     write_file(path, test_source_content);
-    
+
     // Create app source file
     snprintf(path, sizeof(path), "%s/%s/%s.c", root_dir, app_dir, app_dir);
     char app_source_content[512];
@@ -418,6 +419,9 @@ void create_project_structure(const char *root_dir, const char *app_dir, const c
              "set(CMAKE_CXX_STANDARD 17)\n"
              "set(CMAKE_CXX_STANDARD_REQUIRED ON)\n"
              "set(CMAKE_CXX_EXTENSIONS OFF)\n"
+             "set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)\n"
+             "set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)\n"
+             "set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)\n"
              "\n"
              "project(%s\n"
              "  LANGUAGES C CXX\n"
@@ -518,7 +522,10 @@ void create_project_structure(const char *root_dir, const char *app_dir, const c
     // Create .clang-format
     create_clang_format(root_dir);
 
-    // Create README
+    // Create .clang-tidy
+    create_clang_tidy(root_dir);
+
+    // Create markdown files
     create_markdown(root_dir);
 
     // Create license
@@ -620,4 +627,45 @@ void create_clang_format(const char *root_dir) {
 
     // Write the content to the .clang-format file
     write_file(path, clang_format_content);
+}
+
+void create_clang_tidy(const char *root_dir) {
+    char path[512];
+
+    // Define the content for the .clang-tidy file
+    const char *clang_tidy_content =
+        "Checks: 'readability-identifier-naming, readability-namespace-comment, readability-function-size'\n"
+        "CheckOptions:\n"
+        "- key: readability-identifier-naming.VariableCase\n"
+        "value: lower_case\n"
+        "- key: readability-identifier-naming.LocalVariablePrefix\n"
+        "value: local_\n"
+        "- key: readability-identifier-naming.FunctionCase\n"
+        "value: lower_case\n"
+        "- key: readability-identifier-naming.MacroDefinitionCase\n"
+        "value: UPPER_CASE\n"
+        "- key: readability-identifier-naming.LocalConstantPrefix\n"
+        "value: local_\n"
+        "- key: readability-identifier-naming.LocalVariablePrefix\n"
+        "value: local_\n"
+        "- key: readability-identifier-naming.IgnoreMainLikeFunctions\n"
+        "value: true\n"
+        "- key: readability-identifier-naming.ConstantCase\n"
+        "value: UPPER_CASE\n"
+        "- key: readability-identifier-naming.EnumCase\n"
+        "value: PascalCase\n"
+        "- key: readability-identifier-naming.PointerParameterPrefix\n"
+        "value: ptr_\n"
+        "- key: readability-identifier-naming.StructCase\n"
+        "value: PascalCase\n"
+        "- key: readability-identifier-naming.UnionCase\n"
+        "value: PascalCase\n\n"
+        "WarningsAsErrors: ''\n"
+        "FormatStyle: file\n";
+
+    // Create the .clang-tidy file path
+    snprintf(path, sizeof(path), "%s/.clang-tidy", root_dir);
+
+    // Write the content to the .clang-tidy file
+    write_file(path, clang_tidy_content);
 }
