@@ -1,5 +1,11 @@
 # PROGEN
 
+---
+
+![ProGen logo](./progen.webp)
+
+---
+
 ## 🗨️ PRESENTATION
 
 **Project Generator** is a command-line tool for creating a cross-platform C project structure with CMake. It automates the setup of a basic project layout, including directories for source files and configuration files for CMake, making it easier for developers to get started with new C projects.
