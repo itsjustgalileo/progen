@@ -342,13 +342,13 @@ void create_project_structure(const char *root_dir, const char *app_dir, const c
         exit(EXIT_FAILURE);
     }
 
-    snprintf(path, sizeof(path), "%s/Docs", root_dir);
+    snprintf(path, sizeof(path), "%s/docs", root_dir);
     if (create_directory(path) != 0) {
         perror("Error creating docs directory");
         exit(EXIT_FAILURE);
     }
 
-    snprintf(path, sizeof(path), "%s/Tests", root_dir);
+    snprintf(path, sizeof(path), "%s/tests", root_dir);
     if (create_directory(path) != 0) {
         perror("Error creating tests directory");
         exit(EXIT_FAILURE);
@@ -379,7 +379,7 @@ void create_project_structure(const char *root_dir, const char *app_dir, const c
              lib_dir);
     write_file(path, lib_source_content);
 
-    snprintf(path, sizeof(path), "%s/Tests/test.c", root_dir);
+    snprintf(path, sizeof(path), "%s/tests/test.c", root_dir);
     char test_source_content[512];
     snprintf(test_source_content, sizeof(lib_source_content),
              "#include <stdio.h>\n"
@@ -505,7 +505,7 @@ void create_project_structure(const char *root_dir, const char *app_dir, const c
     write_file(path, cmake_app_content);
 
     // Create test CMakeLists.txt
-    snprintf(path, sizeof(path), "%s/Tests/CMakeLists.txt", root_dir);
+    snprintf(path, sizeof(path), "%s/tests/CMakeLists.txt", root_dir);
     char cmake_tests_content[4096];
     snprintf(cmake_tests_content, sizeof(cmake_tests_content),
              "file(GLOB TEST_SRC *.c *.cpp *.cc *.cxx *.c++)\n"
