@@ -223,6 +223,10 @@ void initialize_git_repository(const char *path) {
         "# Ignore object files\n"
         "*.o\n"
         "*.obj\n"
+        "*.a\n"
+        "*.so\n"
+        "*.lib\n"
+        "*.dll\n"
         "\n"
         "# Optional: Ignore other common temporary files\n"
         "*.log\n"
@@ -238,7 +242,7 @@ void initialize_git_repository(const char *path) {
     write_file(gitignore_path, gitignore_content);
 
     // Initialize Git repository
-    snprintf(command, sizeof(command), "cd %s && git init", path);
+    snprintf(command, sizeof(command), "cd %s && git init -b master", path);
     int result = system(command);
     if (result != 0) {
         fprintf(stderr, "Error initializing Git repository.\n");
